@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+
+<head>
+	<meta charset="utf-8">
+	<title>Blogs</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+	<script type="text/javascript" src="/js/app.js"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+
+<body ng-controller="MainController as ctrl">
+	<div class="container-fluid login">
+		<form class="row" ng-class="(ctrl.showLogin ? 'hide-log' : '')" ng-submit="ctrl.createUser()">
+			<div class="col-2 offset-4">
+				<h5 class="text-center">Create User</h5>
+			</div>
+			<div class="col-2">
+				<input type="text" ng-model="ctrl.username" placeholder="New Username" />
+			</div>
+			<div class="col-2">
+				<input type="password" ng-model="ctrl.password" placeholder="Password" />
+			</div>
+			<div class="col-2">
+				<input class="btn btn-secondary" type="submit" value="Create User" ng-click="ctrl.toggleLogin()" />
+			</div>
+		</form>
+		<form class="row hide-log" ng-submit="ctrl.logIn()" ng-class="(ctrl.showLogin ? 'Logged' : '') + ' ' + (ctrl.loggedIn ? 'Log' : '')">
+			<div class="col-2 offset-4">
+				<h5 class="text-center">Log In</h5>
+			</div>
+			<div class="col-2">
+				<input type="text" ng-model="ctrl.username" placeholder="Username" />
+			</div>
+			<div class="col-2">
+				<input type="password" ng-model="ctrl.password" placeholder="Password" />
+			</div>
+			<div class="col-2">
+				<input class="btn btn-secondary" type="submit" value="Log In" ng-click="ctrl.toggleLogout()" />
+			</div>
+		</form>
+		<form class="row" ng-class="(ctrl.loggedIn ? '' : 'Log')">
+			<div class="col-2 offset-10">
+				<input class="btn btn-danger" type="submit" value="Log Out" ng-click="ctrl.logOut()" />
+			</div>
+		</form>
+		<div class="header row">
+			<div class="col">
+				<h1 class="text-center">{{ ctrl.user }}</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container main-content">
+		<form class="row" ng-submit="ctrl.createBlog()">
+			<div class="col-sm-4 col-12 inputs">
+				<input type="text" ng-model="ctrl.title" placeholder="Blog Name" />
+			</div>
+			<div class='col-12 inputs'>
+				<textarea ng-model="ctrl.message" placeholder="Message"></textarea>
+			</div>
+			<div class="col-sm-4 offset-sm-4 col-12 inputs">
+				<input class="btn btn-primary" type="submit" value="Create New Blog" />
+			</div>
+		</form>
+		<div class="main-content">
+			<div class="row blog" ng-repeat="blog in ctrl.blogs">
+				<div class="col-sm-4 col-12">
+					<h4>{{blog.title}}</h4>
+				</div>
+				<div class="col-12">
+					<hr />
+					<p>{{blog.message}}</p>
+				</div>
+				<div class="col-12 text-right" ng-if="ctrl.loggedInUsername">
+					<a href="" ng-click="ctrl.indexOfEdit = $index">Edit</a>
+					<form class="edit" ng-if="$index === ctrl.indexOfEdit" ng-submit="ctrl.editBlog(blog)">
+						<input class="inputs" type="text" ng-model="blog.title" />
+						<textarea class="inputs" ng-model="blog.message"></textarea>
+						<input type="submit" value="Update" />
+					</form>
+					<a href="" class="delete" ng-click="ctrl.deleteBlog(blog)">Delete</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
