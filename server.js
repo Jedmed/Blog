@@ -2,7 +2,10 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const mongoUri =  process.env.MONGODB_URI || 'mongodb://localhost:27017/blogs';
 const session = require('express-session');
+
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -33,13 +36,13 @@ app.get('/blog', (req, res)=>{
 })
 
 
-mongoose.connect('mongodb://localhost:27017/blogs',
+mongoose.connect(mongoUri,
 { useNewUrlParser: true });
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...');
 });
 
 // Listener
-app.listen(3000, () => {
-  console.log('listening...');
+app.listen(port, () => {
+  console.log('Listening on port:', port);
 })
